@@ -1,0 +1,6 @@
+compression:
+  downsampling_rate: "4:2:0"
+  dct_block_size: 8
+  quantization_mode: "soft"
+  noise_present: false
+  out_location: "C:\\0_bilgekagan\\DERSLER\\7. Donem\\EE 473\\Project\\compressed_outputs"
