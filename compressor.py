@@ -194,6 +194,7 @@ def encode_image_coeffs(seq_Y, seq_Cb, seq_Cr, sizes, config) -> bytes:
     return file_bytes 
 
 ########---------- MAIN FUNCTION -----------########
+# Compresses a file with an absolute path, it must be considered while making experimentation
 
 def main():
     # Reading config file
