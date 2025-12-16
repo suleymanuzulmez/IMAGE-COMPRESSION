@@ -1,14 +1,14 @@
 compression:
-  downsampling_rate: "4:2:0"
   dct_block_size: 8
-  quantization_mode: "soft"
+  downsampling_rate: '4:2:2'
   noise_present: false
-  out_location: "C:\\0_bilgekagan\\DERSLER\\7. Donem\\EE 473\\Project\\compressed_outputs"
-
+  noise_sigma: 0
+  out_location: C:\0_bilgekagan\DERSLER\7. Donem\EE 473\Project\compressed_outputs
+  quantization_mode: hsv-oriented
 decompression:
-  downsampling_rate: "4:2:0"
+  downsampling_rate: '4:2:2'
   idct_block_size: 8
-  quantization_mode: "soft"
+  interpolation_mode: bilinear
   noise_present: false
-  out_location: "C:\\0_bilgekagan\\DERSLER\\7. Donem\\EE 473\\Project\\decompressed_outputs"
-  interpolation_mode: "bilinear"
+  out_location: C:\0_bilgekagan\DERSLER\7. Donem\EE 473\Project\decompressed_outputs
+  quantization_mode: hsv-oriented

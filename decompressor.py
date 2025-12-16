@@ -36,6 +36,50 @@ Q_CHROMA = np.array([
     [99, 99, 99, 99, 99, 99, 99, 99],
 ], dtype=np.float32)
 
+Q_LUMA_AGGR = np.array([
+    [ 29,  20,  18,  29,  43,  72,  92, 110],
+    [ 22,  22,  25,  34,  47, 104, 108,  99],
+    [ 25,  23,  29,  43,  72, 103, 124, 101],
+    [ 25,  31,  40,  52,  92, 157, 144, 112],
+    [ 32,  40,  67, 101, 122, 196, 185, 139],
+    [ 43,  63,  99, 115, 146, 187, 203, 166],
+    [ 88, 115, 140, 157, 185, 218, 216, 182],
+    [130, 166, 171, 176, 202, 180, 185, 178],
+], dtype=np.float32)
+
+Q_CHROMA_AGGR = np.array([
+    [ 26,  27,  36,  70, 148, 148, 148, 148],
+    [ 27,  32,  39,  99, 148, 148, 148, 148],
+    [ 36,  39,  84, 148, 148, 148, 148, 148],
+    [ 70,  99, 148, 148, 148, 148, 148, 148],
+    [148, 148, 148, 148, 148, 148, 148, 148],
+    [148, 148, 148, 148, 148, 148, 148, 148],
+    [148, 148, 148, 148, 148, 148, 148, 148],
+    [148, 148, 148, 148, 148, 148, 148, 148],
+], dtype=np.float32)
+
+Q_V_HSV = np.array([
+    [ 11,   8,   7,  16,  24,  40,  66,  79],
+    [  8,   8,  14,  19,  26,  75,  78,  72],
+    [ 10,  13,  16,  24,  52,  74,  90,  73],
+    [ 14,  17,  22,  38,  66, 113, 104,  81],
+    [ 18,  22,  48,  73,  88, 142, 134, 100],
+    [ 24,  46,  72,  83, 105, 135, 147, 120],
+    [ 64,  83, 101, 113, 134, 157, 156, 131],
+    [ 94, 120, 124, 127, 146, 130, 134, 129],
+], dtype=np.float32)
+
+Q_HS_HSV = np.array([
+    [ 17,  18,  24,  61, 129, 129, 158, 158],
+    [ 18,  21,  34,  86, 129, 158, 158, 158],
+    [ 24,  34,  73, 129, 158, 158, 158, 158],
+    [ 61,  86, 129, 158, 158, 158, 158, 158],
+    [129, 129, 158, 158, 158, 158, 158, 158],
+    [129, 158, 158, 158, 158, 158, 158, 158],
+    [158, 158, 158, 158, 158, 158, 158, 158],
+    [158, 158, 158, 158, 158, 158, 158, 158],
+], dtype=np.float32)
+
 ######## -------- BINARY FILE READER ------- ##############
 
 def read_binary_file(path):
@@ -116,9 +160,11 @@ def dequantize_matrix(mat_q, mode, is_it_luma):
         quantization_matrix = Q_LUMA if is_it_luma else Q_CHROMA
         mat = mat_q * quantization_matrix
     elif mode == "agressive":
-        pass
+        quantization_matrix = Q_LUMA_AGGR if is_it_luma else Q_CHROMA_AGGR
+        mat = mat_q * quantization_matrix
     elif mode == "hsv-oriented":
-        pass
+        quantization_matrix = Q_V_HSV if is_it_luma else Q_HS_HSV
+        mat = mat_q * quantization_matrix
     else:
         raise ValueError(f"Unsupported quantization mode: {mode}")
 
@@ -203,7 +249,7 @@ def chroma_upsample(Cb_sub, Cr_sub, out_shape, mode="4:2:0", method="bilinear"):
 ######## -------- MAIN FUNCTION ------- ##############
 # It decompresses a file using absolute path, it must be considered while making experimentation
 
-def main():
+def decompressor(path):
     # Reading config file
     with open(r"C:\0_bilgekagan\DERSLER\7. Donem\EE 473\Project\config.yml", "r") as f:
         config = yaml.safe_load(f)
@@ -215,7 +261,6 @@ def main():
     out_path = config["decompression"]["out_location"]
     
     # We first read binary file
-    path = r"C:\0_bilgekagan\DERSLER\7. Donem\EE 473\Project\compressed_outputs\compressed_image.bin"
     header, Y_seq, Cb_seq, Cr_seq = read_binary_file(path)
 
     # We get QUANTIZED matrices for Y, Cb, and Cr
@@ -267,10 +312,14 @@ def main():
     # Converting back to RGB
     img_rgb = img_ycbcr.convert("RGB")
 
+    base_name = os.path.basename(path)
+    name_root, _ = os.path.splitext(base_name)
+    out_filename = name_root + ".tiff"
+
     os.makedirs(out_path, exist_ok=True)  # klasör yoksa oluştur
-    out_path = os.path.join(out_path, "decompressed_image.tiff")
+    out_path = os.path.join(out_path, out_filename)
     img_rgb.save(out_path)
 
 
 if __name__ == "__main__":
-    main()
+    decompressor()

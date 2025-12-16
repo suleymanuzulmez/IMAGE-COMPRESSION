@@ -1,0 +1,6 @@
+Data klasörü ham işlenmemiş görüntüleri içeriyor. 
+Bu görüntülerden üretilmiş kare gürültülü ve gauss gürültülü resimleri e ayrıca kaydetmiştim.
+
+test.py ve deneme123.py çalışınca ikisi reports kısmında text_results.txt ye MSE ve compression rate degerlerini yazıyor.
+
+reports kısmındaki her klasör de o test için bir örnek resmi içeriyor. Dolayısıyla doğrudan reports kısmındaki fotoğrafları ve test-results.txt dosyasını kullanarak rapor yazabilirsin. İnput görseli göstermek gerekirse bahsettiğim kısımlardan (data veya noised versiyonlarından) gösterebilirsin

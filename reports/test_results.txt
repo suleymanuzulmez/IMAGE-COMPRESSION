@@ -1,0 +1,36 @@
+---------------TESTS------------------
+Time = 12.12.2025 11:09:06
+CHROMA 4:4:4 ---- Average compression rate is: 6.049584572694716
+CHROMA 4:4:4 ---- Average MSE is: 65.36567006997564
+CHROMA 4:2:2 ---- Average compression rate is: 8.485231827029212
+CHROMA 4:2:2 ---- Average MSE is: 72.67306465020134
+CHROMA 4:2:0 ---- Average compression rate is: 10.62561224036738
+CHROMA 4:2:0 ---- Average MSE is: 79.63795886222593
+Quantization SOFT ---- Average compression rate is: 8.653385683484366
+Quantization SOFT ---- Average MSE is: 68.62276588371739
+Quantization AGRESSIVE ---- Average compression rate is: 9.634797942689199
+Quantization AGRESSIVE ---- Average MSE is: 89.74775685815796
+Quantization HSV-Oriented ---- Average compression rate is: 8.485231827029212
+Quantization HSV-Oriented ---- Average MSE is: 72.67306465020134
+ MSE for sigma of 0 is : 72.67306465020134
+Noise with sigma = 0 ---- Average compression rate is: 8.485231827029212
+ MSE for sigma of 5 is : 79.11335511187887
+Noise with sigma = 5 ---- Average compression rate is: 8.426174790029902
+ MSE for sigma of 10 is : 94.74084335824857
+Noise with sigma = 10 ---- Average compression rate is: 8.259530474044507
+ MSE for sigma of 20 is : 176.85077875136025
+Noise with sigma = 20 ---- Average compression rate is: 7.81761816187342
+ MSE for sigma of 30 is : 370.7390837492811
+Noise with sigma = 30 ---- Average compression rate is: 7.370544237078991
+------------------------------------------------------------------
+ MSE for width of 1 is : 72.9808181318459
+Noise with width of 0 ---- Average compression rate is: 8.481184810674778
+ MSE for width of 5 is : 72.88533968195566
+Noise with width of 5 ---- Average compression rate is: 8.47202134006992
+ MSE for width of 10 is : 72.65112541740598
+Noise with width of 10 ---- Average compression rate is: 8.47354356833321
+ MSE for width of 20 is : 72.32693445504927
+Noise with width of 20 ---- Average compression rate is: 8.475437393255527
+ MSE for width of 30 is : 72.10636808801127
+Noise with width of 30 ---- Average compression rate is: 8.480087328702892
+------------------------------------------------------------------

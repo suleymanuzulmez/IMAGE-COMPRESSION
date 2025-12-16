@@ -34,6 +34,50 @@ Q_CHROMA = np.array([
     [99, 99, 99, 99, 99, 99, 99, 99],
 ], dtype=np.float32)
 
+Q_LUMA_AGGR = np.array([
+    [ 29,  20,  18,  29,  43,  72,  92, 110],
+    [ 22,  22,  25,  34,  47, 104, 108,  99],
+    [ 25,  23,  29,  43,  72, 103, 124, 101],
+    [ 25,  31,  40,  52,  92, 157, 144, 112],
+    [ 32,  40,  67, 101, 122, 196, 185, 139],
+    [ 43,  63,  99, 115, 146, 187, 203, 166],
+    [ 88, 115, 140, 157, 185, 218, 216, 182],
+    [130, 166, 171, 176, 202, 180, 185, 178],
+], dtype=np.float32)
+
+Q_CHROMA_AGGR = np.array([
+    [ 26,  27,  36,  70, 148, 148, 148, 148],
+    [ 27,  32,  39,  99, 148, 148, 148, 148],
+    [ 36,  39,  84, 148, 148, 148, 148, 148],
+    [ 70,  99, 148, 148, 148, 148, 148, 148],
+    [148, 148, 148, 148, 148, 148, 148, 148],
+    [148, 148, 148, 148, 148, 148, 148, 148],
+    [148, 148, 148, 148, 148, 148, 148, 148],
+    [148, 148, 148, 148, 148, 148, 148, 148],
+], dtype=np.float32)
+
+Q_V_HSV = np.array([
+    [ 11,   8,   7,  16,  24,  40,  66,  79],
+    [  8,   8,  14,  19,  26,  75,  78,  72],
+    [ 10,  13,  16,  24,  52,  74,  90,  73],
+    [ 14,  17,  22,  38,  66, 113, 104,  81],
+    [ 18,  22,  48,  73,  88, 142, 134, 100],
+    [ 24,  46,  72,  83, 105, 135, 147, 120],
+    [ 64,  83, 101, 113, 134, 157, 156, 131],
+    [ 94, 120, 124, 127, 146, 130, 134, 129],
+], dtype=np.float32)
+
+Q_HS_HSV = np.array([
+    [ 17,  18,  24,  61, 129, 129, 158, 158],
+    [ 18,  21,  34,  86, 129, 158, 158, 158],
+    [ 24,  34,  73, 129, 158, 158, 158, 158],
+    [ 61,  86, 129, 158, 158, 158, 158, 158],
+    [129, 129, 158, 158, 158, 158, 158, 158],
+    [129, 158, 158, 158, 158, 158, 158, 158],
+    [158, 158, 158, 158, 158, 158, 158, 158],
+    [158, 158, 158, 158, 158, 158, 158, 158],
+], dtype=np.float32)
+
 ########---------- DOWNSAMPLING FUNCTIONS ----------########
 
 def downsample_444(C):
@@ -99,9 +143,11 @@ def quantize_matrix(mat, mode="soft", is_it_luma = False):
         quantization_matrix = Q_LUMA if is_it_luma else Q_CHROMA
         mat_q = np.round(mat / quantization_matrix)
     elif mode == "agressive":
-        pass
+        quantization_matrix = Q_LUMA_AGGR if is_it_luma else Q_CHROMA_AGGR
+        mat_q = np.round(mat / quantization_matrix)    
     elif mode == "hsv-oriented":
-        pass
+        quantization_matrix = Q_V_HSV if is_it_luma else Q_HS_HSV
+        mat_q = np.round(mat / quantization_matrix)
     else:
         raise ValueError(f"Unsupported quantization mode: {mode}")
     
@@ -196,7 +242,7 @@ def encode_image_coeffs(seq_Y, seq_Cb, seq_Cr, sizes, config) -> bytes:
 ########---------- MAIN FUNCTION -----------########
 # Compresses a file with an absolute path, it must be considered while making experimentation
 
-def main():
+def compressor(path):
     # Reading config file
     with open(r"C:\0_bilgekagan\DERSLER\7. Donem\EE 473\Project\config.yml", "r") as f:
         config = yaml.safe_load(f)
@@ -206,7 +252,6 @@ def main():
     out_path = config["compression"]["out_location"]
 
     # Loading the image
-    path = r"C:\0_bilgekagan\DERSLER\7. Donem\EE 473\Project\data\4.2.06.tiff"
     img = Image.open(path)
 
     # Converting image format to YCbCr
@@ -262,10 +307,15 @@ def main():
     binary_data = encode_image_coeffs(seq_Y, seq_Cb, seq_Cr, [[M,N], [K,L], [Q,R]], config)
 
     # Writing to output binary file
+
+    base_name = os.path.basename(path)
+    name_root, _ = os.path.splitext(base_name)
+    out_filename = name_root + ".bin"
+
     os.makedirs(out_path, exist_ok=True)
-    with open(os.path.join(out_path, "compressed_image.bin"), "wb") as f:
+    with open(os.path.join(out_path, out_filename), "wb") as f:
         f.write(binary_data)
 
 
 if __name__ == "__main__":
-    main()
+    compressor()
